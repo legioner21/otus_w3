@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otus-work-3-app-deployment
+  labels:
+    app: otus-work-3-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: otus-work-3-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: otus-work-3-app
+    spec:
+      containers:
+      - name: otis-work3
+        image: legioner4/otis-work:3.0
+        ports:
+          - containerPort: 8000
+        readinessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /api/v1/app/health/
+            port: 8000
+        livenessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /api/v1/app/health/
+            port: 8000
+        env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: otus-work-3-app-secrets
+                key: DATABASE_URL
+          - name: PROJECT_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: otus-work-3-app-config
+                key: PROJECT_NAME
