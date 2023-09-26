@@ -1,0 +1,12 @@
+global:
+  postgresql:
+    auth:
+      existingSecret: "otus-work-3-app-secrets"
+      username: postgres
+      database: otus_db
+      secretKeys:
+        adminPasswordKey: POSTGRES_PASSWORD
+        userPasswordKey: POSTGRES_PASSWORD
+    service:
+      ports:
+        postgresql: 5432
